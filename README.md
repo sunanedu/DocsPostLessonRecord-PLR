@@ -18,7 +18,10 @@
       "email": "somchai@example.com"
   }
   ```
-- **Response (Success)**: `201 Created` + `{"message": "User registered successfully"}`
+- **Response (Success)**: `201 Created`
+```json
+{"message": "User registered successfully"}
+```
 
 ### เข้าสู่ระบบ
 - **URL**: `POST http://127.0.0.1/plr/api/auth/login`
@@ -29,13 +32,19 @@
       "password": "1234567890123"
   }
   ```
-- **Response (Success)**: `200 OK` + `{"token": "jwt_token", "roles": ["teacher"], "active_role": "teacher"}`
+- **Response (Success)**: `200 OK` 
+```json
+{"token": "jwt_token", "roles": ["teacher"], "active_role": "teacher"}
+```
 
 ## 2. ครู (role_id: 2, 'teacher')
 ### ดูข้อมูลตนเอง
 - **URL**: `GET http://127.0.0.1/plr/api/users`
 - **Headers**: `Authorization: Bearer <jwt_token>`
-- **Response (Success)**: `200 OK` + `{"user_id": 1, "citizen_id": "1234567890123", ...}`
+- **Response (Success)**: `200 OK` 
+```json
+{"user_id": 1, "citizen_id": "1234567890123", ...}
+```
 
 ### แก้ไขข้อมูลตนเอง
 - **URL**: `PUT http://127.0.0.1/plr/api/users`
@@ -47,12 +56,18 @@
       "email": "somchai2@example.com"
   }
   ```
-- **Response (Success)**: `200 OK` + `{"message": "Profile updated successfully"}`
+- **Response (Success)**: `200 OK`
+  ```json
+  {"message": "Profile updated successfully"}
+  ```
 
 ### ลบข้อมูลตนเอง
 - **URL**: `DELETE http://127.0.0.1/plr/api/users`
 - **Headers**: `Authorization: Bearer <jwt_token>`
-- **Response (Success)**: `200 OK` + `{"message": "Profile disabled successfully"}`
+- **Response (Success)**: `200 OK`
+```json
+{"message": "Profile disabled successfully"}
+```
 
 ### เปลี่ยนรหัสผ่าน
 - **URL**: `POST http://127.0.0.1/plr/api/auth/change-password`
@@ -65,17 +80,26 @@
       "new_password": "newpassword123"
   }
   ```
-- **Response (Success)**: `200 OK` + `{"message": "Password changed successfully"}`
+- **Response (Success)**: `200 OK` 
+```json
+{"message": "Password changed successfully"}
+```
 
 ### ดูวิชาทั้งหมด
 - **URL**: `GET http://127.0.0.1/plr/api/courses?user_id=1&semester_id=1`
 - **Headers**: `Authorization: Bearer <jwt_token>`
-- **Response (Success)**: `200 OK` + `[{ "course_id": 1, "course_code": "CS101", ... }]`
+- **Response (Success)**: `200 OK` 
+```json
+[{ "course_id": 1, "course_code": "CS101", ... }]
+```
 
 ### ดูวิชาเฉพาะ id
 - **URL**: `GET http://127.0.0.1/plr/api/courses/1?user_id=1`
 - **Headers**: `Authorization: Bearer <jwt_token>`
-- **Response (Success)**: `200 OK` + `{"course_id": 1, "course_code": "CS101", ...}`
+- **Response (Success)**: `200 OK` 
+```json
+{"course_id": 1, "course_code": "CS101", ...}
+```
 
 ### เพิ่มวิชา (หลายรายการ)
 - **URL**: `POST http://127.0.0.1/plr/api/courses`
@@ -87,7 +111,10 @@
       {"course_code": "CS102", "course_name": "Advanced CS", "user_id": 1}
   ]
   ```
-- **Response (Success)**: `201 Created` + `{"message": "Course created successfully"}`
+- **Response (Success)**: `201 Created`  
+```json
+{"message": "Course created successfully"}
+```
 
 ### แก้ไขวิชา (หลายรายการ)
 - **URL**: `PUT http://127.0.0.1/plr/api/courses`
@@ -108,17 +135,26 @@
   ```json
   {"course_ids": [1, 2]}
   ```
-- **Response (Success)**: `200 OK` + `{"message": "2 courses deleted successfully"}`
+- **Response (Success)**: `200 OK` + 
+```json
+{"message": "2 courses deleted successfully"}
+```
 
 ### ดูบันทึกทั้งหมด
 - **URL**: `GET http://127.0.0.1/plr/api/records?user_id=1`
 - **Headers**: `Authorization: Bearer <jwt_token>`
-- **Response (Success)**: `200 OK` + `[{ "record_id": 1, "course_id": 1, ... }]`
+- **Response (Success)**: `200 OK` 
+```json
+[{ "record_id": 1, "course_id": 1, ... }]
+```
 
 ### ดูบันทึกเฉพาะ id
 - **URL**: `GET http://127.0.0.1/plr/api/records/1`
 - **Headers**: `Authorization: Bearer <jwt_token>`
-- **Response (Success)**: `200 OK` + `{"record_id": 1, "course_id": 1, ...}`
+- **Response (Success)**: `200 OK` 
+```json
+{"record_id": 1, "course_id": 1, ...}
+```
 
 ### บันทึกหลังการสอน (หลายรายการ)
 - **URL**: `POST http://127.0.0.1/plr/api/records`
