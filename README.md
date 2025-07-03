@@ -4,7 +4,15 @@
 เอกสารนี้ให้รายละเอียดการใช้งาน API ทั้งหมดของระบบ Post Lesson Record (PLR) โดยออกแบบตามมาตรฐานระดับสากล เช่น LINE และบริษัทชั้นนำอื่น ๆ ครอบคลุมวิธีการใช้งาน Endpoint, Method, URI, Request Headers, Request Body, Response, รวมถึงการใช้ Bearer Token และ X-Active-Role สำหรับการระบุบทบาทผู้ใช้ (Guest, Teacher, Department Head, Director, Admin)
 
 ---
+## การใช้งานทั่วไป
+- **Bearer Token**: ใส่ใน header `Authorization: Bearer <token>` หลังจากล็อกอิน
+- **X-Active-Role**: ระบุบทบาท เช่น `X-Active-Role: teacher`
+- **สถานะทั่วไป**:
+  - **401 Unauthorized**: Token หมดอายุหรือไม่มีสิทธิ์
+  - **403 Forbidden**: ไม่มีสิทธิ์เข้าถึง
+  - **500 Internal Server Error**: ปัญหาด้านเซิร์ฟเวอร์
 
+  ---
 ## 1. แขก (Guest - ผู้เยี่ยมชม)
 ผู้ใช้ที่ยังไม่ได้ลงทะเบียนหรือล็อกอิน
 
@@ -19,7 +27,7 @@
 - **Request Body**:
   ```json
   {
-    "citizen_id": "1101901234567",
+    "citizen_id": "1234567890123",
     "prefix": "นาย",
     "first_name": "สมชาย",
     "last_name": "ใจดี",
@@ -35,7 +43,7 @@
       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
       "user": {
         "user_id": 10,
-        "citizen_id": "1101901234567",
+        "citizen_id": "1234567890123",
         "role": "teacher"
       }
     }
@@ -54,7 +62,8 @@
 - **Request Body**:
   ```json
   {
-    "citizen_id": "1101901234567"
+    "citizen_id": "1234567890123",
+    "password": "1234567890123"
   }
   ```
 - **Response**:
@@ -84,9 +93,9 @@
     ```json
     {
       "user_id": 2,
-      "citizen_id": "1101901234568",
-      "first_name": "อุดร",
-      "last_name": "เศษโถ",
+      "citizen_id": "1111111111111",
+      "first_name": "สมศักดิ์",
+      "last_name": "หารกล้า",
       "department_id": 1
     }
     ```
@@ -104,7 +113,7 @@
 - **Request Body**:
   ```json
   {
-    "first_name": "อุดร (อัพเดท)",
+    "first_name": "สมศักดิ์ (อัพเดท)",
     "email": "udon.updated@example.com"
   }
   ```
@@ -115,7 +124,7 @@
       "message": "อัปเดตข้อมูลสำเร็จ",
       "user": {
         "user_id": 2,
-        "first_name": "อุดร (อัพเดท)",
+        "first_name": "สมศักดิ์ (อัพเดท)",
         "email": "udon.updated@example.com"
       }
     }
@@ -153,7 +162,7 @@
 - **Request Body**:
   ```json
   {
-    "old_password": "1101901234568",
+    "old_password": "2222222222222",
     "new_password": "newpassword123"
   }
   ```
@@ -406,7 +415,7 @@
         "total_records": 5
       }
       ```
-- **สรุปตาม department (USER_VIEW=1)**: 
+- **สรุปตาม department (ถ้าค่า USER_VIEW=1)**: 
   - **Method**: GET
   - **URI**: `http://127.0.0.1/plr/api/records/semesters/1/summary/department/1`
   - **Response**: 
@@ -417,7 +426,7 @@
         "total_records": 10
       }
       ```
-    - **403 Forbidden**: USER_VIEW=0
+    - **403 Forbidden**: ถ้าค่า USER_VIEW=0
 
 ### 2.8 ครู - ตัวช่วย/ตัวเลือก
 - **ดูทั้งหมด**: 
@@ -504,7 +513,7 @@
 ## 3. หัวหน้าแผนก (Role ID: 3, 'department-head')
 จัดการข้อมูลบันทึกและการอนุมัติ
 
-### 3.1 ดูบันทึกตามเทอม
+### 3.1 ดูบันทึก เงื่อนไขเฉพาะ เทอม
 - **ดูทั้งหมดของ semester**: 
   - **Method**: GET
   - **URI**: `http://127.0.0.1/plr/api/records/semesters/1`
@@ -519,7 +528,7 @@
         }
       ]
       ```
-- **ดูตาม department**: 
+- **ดูเงื่อนไขเฉพาะ  semester -> department**: 
   - **Method**: GET
   - **URI**: `http://127.0.0.1/plr/api/records/semesters/1/department/1`
   - **Response**: 
@@ -533,7 +542,7 @@
         }
       ]
       ```
-- **ดูตาม teacher**: 
+- **ดูเงื่อนไขเฉพาะ  semester -> department -> teacher**: 
   - **Method**: GET
   - **URI**: `http://127.0.0.1/plr/api/records/semesters/1/department/1/teacher/2`
   - **Response**: 
@@ -558,7 +567,7 @@
         "total_records": 5
       }
       ```
-- **สรุปตาม department**: 
+- **สรุปเงื่อนไขเฉพาะ department**: 
   - **Method**: GET
   - **URI**: `http://127.0.0.1/plr/api/records/semesters/1/summary/department/1`
   - **Response**: 
@@ -585,7 +594,7 @@
         }
       ]
       ```
-- **ดูตาม semester**: 
+- **ดูเงื่อนไขเฉพาะเทอม semester**: 
   - **Method**: GET
   - **URI**: `http://127.0.0.1/plr/api/approvals/semesters/1`
   - **Response**: 
@@ -666,7 +675,7 @@
 
 ---
 
-## 4. รองผู้อำนวยการ/เลขา (Role ID: 4, 'director')
+## 4. รองผู้อำนวยการ/ผู้ช่วย/เลขา (Role ID: 4, 'director')
 จัดการการอนุมัติขั้นสูง
 
 ### 4.1 ดูการอนุมัติ
@@ -685,7 +694,7 @@
         }
       ]
       ```
-- **ดูตาม semester**: 
+- **เรียกดูเงื่อนไขเฉพาะ  semester**: 
   - **Method**: GET
   - **URI**: `http://127.0.0.1/plr/api/director/approvals/semesters/1`
   - **Response**: 
@@ -700,7 +709,7 @@
         }
       ]
       ```
-- **ดูตาม department**: 
+- **เรียกดูเงื่อนไขเฉพาะ semester -> department**: 
   - **Method**: GET
   - **URI**: `http://127.0.0.1/plr/api/director/approvals/semesters/1/department/1`
   - **Response**: 
@@ -715,7 +724,7 @@
         }
       ]
       ```
-- **ดูตาม teacher**: 
+- **เรียกดูเงื่อนไขเฉพาะ semester -> departmen -> teacher**: 
   - **Method**: GET
   - **URI**: `http://127.0.0.1/plr/api/director/approvals/semesters/1/department/1/teacher/2`
   - **Response**: 
@@ -787,6 +796,7 @@
     ```json
     [4]
     ```
+    **ลบสำเร็จ 4 รายการ
   - **Response**: 
     - **200 OK**:
       ```json
@@ -1483,13 +1493,13 @@
   X-Active-Role: [teacher|admin|department-head|director]
   Content-Type: multipart/form-data
   ```
-- **Request Body**: ไฟล์ .png หรือ .jpg ขนาด < 8MB (ชื่อไฟล์: signature.png)
+- **Request Body**: เฉพาะไฟล์ .png หรือ .jpg ขนาด < 8MB (ชื่อไฟล์: สุ่มอักขระ.png)
 - **Response**:
   - **200 OK**:
     ```json
     {
       "message": "อัปโหลดลายเซ็นสำเร็จ",
-      "signature_path": "/dashboard/assets/images/signatures/signature.png"
+      "signature_path": "/dashboard/assets/images/signatures/xxxxxxx_idcard-signature.png"
     }
     ```
   - **400 Bad Request**: ไฟล์ไม่ถูกต้อง
@@ -1533,10 +1543,3 @@
 
 ---
 
-## การใช้งานทั่วไป
-- **Bearer Token**: ใส่ใน header `Authorization: Bearer <token>` หลังจากล็อกอิน
-- **X-Active-Role**: ระบุบทบาท เช่น `X-Active-Role: teacher`
-- **สถานะทั่วไป**:
-  - **401 Unauthorized**: Token หมดอายุหรือไม่มีสิทธิ์
-  - **403 Forbidden**: ไม่มีสิทธิ์เข้าถึง
-  - **500 Internal Server Error**: ปัญหาด้านเซิร์ฟเวอร์
