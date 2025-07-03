@@ -1,7 +1,7 @@
 # คู่มือการใช้งาน API ระบบ Post Lesson Record (PLR)
 ## อัพเดท 3 กรกฎาคม 2025 16.30น.
 
-เอกสารนี้ให้รายละเอียดการใช้งาน API ทั้งหมดของระบบ Post Lesson Record (PLR) โดยออกแบบตามมาตรฐานระดับสากล เช่น LINE และบริษัทชั้นนำอื่น ๆ ครอบคลุมวิธีการใช้งาน Endpoint, Method, URI, Request Headers, Request Body, Response, รวมถึงการใช้ Bearer Token และ X-Active-Role สำหรับการระบุบทบาทผู้ใช้ (Guest, Teacher, Department Head, Director, Admin)
+เอกสารนี้ให้รายละเอียดการใช้งาน API ทั้งหมดของระบบ Post Lesson Record (PLR)  ครอบคลุมวิธีการใช้งาน Endpoint, Method, URI, Request Headers, Request Body, Response, รวมถึงการใช้ Bearer Token และ X-Active-Role สำหรับการระบุบทบาทผู้ใช้ (Teacher, Department Head, Director, Admin)
 
 ---
 ## การใช้งานทั่วไป
